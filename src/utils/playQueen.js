@@ -1,53 +1,89 @@
+import dataTree from 'data-tree';
+
+
+
 class Chess {
     constructor(queensNumber) {
         this.board = new Board(queensNumber);
         this.solution = [];
-        this.tree = [];
+        this.treeQueen = [];
         this.queensNumber = queensNumber;
+        this.tree = null;
     }
 
 
     solvePuzzle() {
+        this.tree = dataTree.create();
         return this.placeQueen(0, 0);
     }
 
-    
 
+    createTree() {
+        this.tree.insert({
+            key: 0,
+            values: {
+                status: "none",
+                position: "",
+            }
+        })
+        const parents = [...new Set(this.treeQueen.map((item) => item.parent ))];
+        console.log("parents", parents);
+        parents.forEach(parent => {
+            const children = this.treeQueen.filter(item => item.parent === parent);
+            children.forEach(node => {
+                this.tree.insertTo((data) => data.key === node.parent, {
+                    key: node.id,
+                    values: {
+                        status: node.status,
+                        position: node.id,
+                    }
+                })
+            }
+            )
+        });
+    }
+
+    addPush(newPosition) {
+        const index = this.treeQueen.findIndex((item) => item.id === newPosition.id);
+        if (index >= 0) {
+            this.treeQueen[index].status = newPosition.status;
+        } else {
+            this.treeQueen.push(newPosition);
+        }
+
+    }
 
     placeQueen(row, parent) {
-        
+
         if (row > this.queensNumber - 1) {
             return true;
         }
         let columns = [];
-        for(let i= 0; i<this.queensNumber; i++){
+        for (let i = 0; i < this.queensNumber; i++) {
             columns.push(i);
         }
         let options = this.shuffle(columns);
         // let options = this.shuffle([0, 1, 2, 3, 4, 5, 6, 7]);
         // console.log("Options",row,options);
-        
+
         for (let i = 0; i < options.length; i++) {
-            
+
             let col = options[i];
-            const id=`${row}-${col}`
-            
+            const id = `${row}-${col}`
+
             if (this.isSquareThreatened(row, col)) {
-                this.tree.push({parent, id, status: "kill"})
+                this.addPush({ parent, id, status: "kill" })
                 continue;
             }
-            this.tree.push({parent, id, status: "safe"})
-
             this.board.squares[row][col].hasQueen = true;
-
             if (this.placeQueen(row + 1, id)) {
+                this.addPush({ parent, id, status: "safe" });
                 this.solution.push(this.board.squares[row][col].id);
                 return true;
             }
-
+            this.addPush({ parent, id, status: "kill" })
             this.board.squares[row][col].hasQueen = false;
         }
-
         return false;
     }
 
@@ -122,7 +158,6 @@ class Board {
     }
 }
 
-
 class Square {
     constructor(row, col) {
         this.row = row;
@@ -136,54 +171,12 @@ class Square {
 
 let chess = null;
 
-
-// window.onload = () => {
-//     drawMainBoard();
-//     playAgain();
-
-//     displayStory();
-// }
-
-
-// function drawMainBoard() {
-//     let board = document.getElementById("main-board"),
-//         classes = ["white-square", "dark-square"];
-
-//     for (let row = 0; row < 8; row++) {
-//         let c = row % 2;
-
-//         for (let col = 0; col < 8; col++) {
-//             let square = document.createElement("div");
-
-//             square.className = classes[c] + " " + "square";
-//             square.id = `${row}, ${col}`;
-
-//             board.appendChild(square);
-//             c = (c + 1) % 2;
-//         }
-//     }
-// }
-
-
-// function displaySolution() {
-//     chess.solution.forEach(id => {
-//         let square = document.getElementById(id);
-//         square.innerHTML = '<i class="fas fa-chess-queen"></i>';
-//     });
-// }
-
-
 function clearBoard() {
     if (chess == null) {
         return;
     }
 
-    // chess.solution.forEach(id => {
-    //     let square = document.getElementById(id);
-    //     square.innerHTML = '';
-    // });
 }
-
 
 function playAgain(queensNumber) {
     clearBoard();
@@ -193,16 +186,17 @@ function playAgain(queensNumber) {
         alert("Could not find a solution!");
         return;
     }
-    console.log("Solution:",chess.solution);
-    console.log("tree:",chess.tree);
-
-    // displaySolution();
+    console.log("Solution:", chess.solution);
+    console.log("tree:", chess.treeQueen);
+    chess.createTree();
+    return chess.tree.export((data) => {
+        return {
+            name: `${data.values.position}`,
+            attributes: {
+                status: data.values.status,
+            },
+        }
+    })
 }
-
-
-// function displayStory() {
-//     let story = document.getElementById("story");
-//     story.innerHTML = getStoryHtml();
-// }
 
 export { playAgain };
