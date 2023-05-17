@@ -1,7 +1,5 @@
 import dataTree from 'data-tree';
 
-
-
 class Chess {
     constructor(queensNumber) {
         this.board = new Board(queensNumber);
@@ -14,39 +12,52 @@ class Chess {
 
     solvePuzzle() {
         this.tree = dataTree.create();
-        return this.placeQueen(0, 0);
+        return this.placeQueen(0, '0');
     }
 
 
     createTree() {
         this.tree.insert({
-            key: 0,
+            key: "0",
             values: {
                 status: "none",
                 position: "",
             }
         })
-        const parents = [...new Set(this.treeQueen.map((item) => item.parent ))];
-        console.log("parents", parents);
-        parents.forEach(parent => {
-            const children = this.treeQueen.filter(item => item.parent === parent);
-            children.forEach(node => {
-                this.tree.insertTo((data) => data.key === node.parent, {
-                    key: node.id,
-                    values: {
-                        status: node.status,
-                        position: node.id,
-                    }
-                })
+        let continueFlag = true;
+        let parentNow = ["0"];
+        let i = 0;
+        while (continueFlag) {
+            const children = this.treeQueen.filter(item => parentNow.includes(item.parent));
+            // console.log("Children:", children);
+            if (children.length > 0) {
+                parentNow = [];
+                children.forEach(node => {
+                    parentNow.push(node.id)
+                    this.tree.insertTo((data) => data.key === node.parent, {
+                        key: node.id,
+                        values: {
+                            status: node.status,
+                            position: node.id,
+                        }
+                    })
+                });
+            } else {
+                continueFlag = false;
             }
-            )
-        });
+            if(i>20){
+                continueFlag = false;
+            }else{
+                i++;
+            }
+        }
     }
 
     addPush(newPosition) {
         const index = this.treeQueen.findIndex((item) => item.id === newPosition.id);
         if (index >= 0) {
             this.treeQueen[index].status = newPosition.status;
+            this.treeQueen[index].parent = newPosition.parent;
         } else {
             this.treeQueen.push(newPosition);
         }
@@ -72,7 +83,7 @@ class Chess {
             const id = `${row}-${col}`
 
             if (this.isSquareThreatened(row, col)) {
-                this.addPush({ parent, id, status: "kill" })
+                this.addPush({ parent, id, status: "removed" })
                 continue;
             }
             this.board.squares[row][col].hasQueen = true;
@@ -81,7 +92,7 @@ class Chess {
                 this.solution.push(this.board.squares[row][col].id);
                 return true;
             }
-            this.addPush({ parent, id, status: "kill" })
+            this.addPush({ parent, id, status: "back" })
             this.board.squares[row][col].hasQueen = false;
         }
         return false;
@@ -193,7 +204,7 @@ function playAgain(queensNumber) {
         return {
             name: `${data.values.position}`,
             attributes: {
-                status: data.values.status,
+                tag: data.values.status,
             },
         }
     })
