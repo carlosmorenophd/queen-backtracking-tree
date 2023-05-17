@@ -1,70 +1,37 @@
-# Getting Started with Create React App
+# Algoritmo de las 8 reinas por backtracking
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Algoritmo hecho para resolver n reinas y retornando el árbol de ejecución del código.
 
-## Available Scripts
+## Estados
+El árbol tiene 4 tipos de tags:
+* none - Raíz del árbol
+* safe - nodo valido y es el resultados del algoritmo
+* remove - nodo eliminado por la función P
+* back - nodo no valido y eliminado por la función de backtracking
 
-In the project directory, you can run:
+![Ejemplo del arbol](assert/exampleTree.png)
 
-### `npm start`
+## Codigo creade en React, empleando Yarn para desplegar
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+```bash
+yarn run start
+```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+# 8 queens backtracking algorithm
 
-### `npm test`
+Algorithm made to solve n queens and return the execution tree of the code.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## State
+The tree has 4 types of labels:
+* none - Tree root
+* safe - valid node and is the result of the algorithm
+* remove - not removed by function P
+* back - invalid and removed by the backtracing function
 
-### `npm run build`
+![Ejemplo del arbol](assert/exampleTree.png)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Code created in React, using Yarn to display this
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```bash
+yarn run start
+```
